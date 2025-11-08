@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: leetcode-oauth-service
+  namespace: leetcode-oauth
+  labels:
+    app: leetcode-oauth-app
+spec:
+  type: ClusterIP
+  selector:
+    app: leetcode-oauth-app
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+    protocol: TCP
+  sessionAffinity: None

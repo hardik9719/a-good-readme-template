@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (for local development only)
+  # In production, use Supabase
+  postgres:
+    image: postgres:15-alpine
+    container_name: leetcode-oauth-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: leetcode_oauth_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - leetcode-network
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: leetcode-oauth-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/leetcode_oauth_app?schema=public
+      - DIRECT_URL=postgresql://postgres:postgres@postgres:5432/leetcode_oauth_app?schema=public
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - LOG_LEVEL=info
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - leetcode-network
+    restart: unless-stopped
+
+  # Redis (Optional - for caching and sessions)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: leetcode-oauth-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 3s
+  #     retries: 5
+  #   networks:
+  #     - leetcode-network
+
+networks:
+  leetcode-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  # redis_data:
+  #   driver: local

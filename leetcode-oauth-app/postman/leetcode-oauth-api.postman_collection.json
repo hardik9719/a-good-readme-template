@@ -1,0 +1,175 @@
+{
+  "info": {
+    "name": "LeetCode OAuth API",
+    "description": "Complete API collection for LeetCode OAuth application with Google sign-in and LeetCode integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sessionToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Check API health status and database connection"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Get CSRF Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/csrf",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "csrf"]
+            },
+            "description": "Get CSRF token for authentication"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/session",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "session"]
+            },
+            "description": "Get current user session"
+          },
+          "response": []
+        },
+        {
+          "name": "Sign Out",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signout"]
+            },
+            "description": "Sign out current user"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "LeetCode Integration",
+      "item": [
+        {
+          "name": "Link LeetCode Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leetcodeUsername\": \"test_user\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/leetcode/link",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "leetcode", "link"]
+            },
+            "description": "Link LeetCode account to current user"
+          },
+          "response": []
+        },
+        {
+          "name": "Fetch Submissions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/leetcode/submissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "leetcode", "submissions"]
+            },
+            "description": "Fetch last 5 LeetCode submissions for authenticated user"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "inherit"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script for all requests",
+          "console.log('Making request to:', pm.request.url.toString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Test script for all requests",
+          "pm.test('Status code is success', function () {",
+          "    pm.response.to.be.success;",
+          "});",
+          "",
+          "pm.test('Response time is less than 2000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});"
+        ]
+      }
+    }
+  ]
+}
