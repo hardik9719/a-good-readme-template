@@ -2,6 +2,15 @@
 
 A modern, cloud-based Next.js application featuring Google OAuth authentication, guest login, and LeetCode integration. Built with TypeScript, following TDD principles and implementing enterprise-grade design patterns.
 
+## 🚀 Quick Start
+
+**New to this project?** Follow these guides in order:
+
+1. **[Local Development Runbook](./LOCAL_DEVELOPMENT_RUNBOOK.md)** - Complete local setup guide
+2. **Run verification**: `./scripts/verify-setup.sh` - Automated environment check
+3. **[Cloud Deployment Guide](./CLOUD_DEPLOYMENT.md)** - Deploy to Supabase, Docker, K8s, Vercel
+4. **[Architecture Documentation](./ARCHITECTURE.md)** - Design patterns and system design
+
 ## Features
 
 - **Multiple Authentication Methods**
